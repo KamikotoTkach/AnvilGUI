@@ -180,6 +180,10 @@ public class AnvilGUI {
         container = WRAPPER.newContainerAnvil(player, titleComponent);
 
         if (renameVisitor != null) {
+            if (!container.isExtendedApiSupported()) {
+                throw new UnsupportedOperationException(
+                        "onRename is not supported on this Minecraft version (" + Bukkit.getBukkitVersion() + ")");
+            }
             container.setRenameVisitor(s -> {
                 StateSnapshot stateSnapshot = StateSnapshot.fromAnvilGUI(this);
                 return renameVisitor.apply(s, stateSnapshot);

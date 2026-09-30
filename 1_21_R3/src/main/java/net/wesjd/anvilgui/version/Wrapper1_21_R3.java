@@ -109,6 +109,11 @@ public final class Wrapper1_21_R3 implements VersionWrapper {
         }
 
         @Override
+        public boolean isExtendedApiSupported() {
+            return true;
+        }
+
+        @Override
         public void setLeftItem(ItemStack item) {
             this.b(0).f(CraftItemStack.asNMSCopy(item));
         }
@@ -188,12 +193,15 @@ public final class Wrapper1_21_R3 implements VersionWrapper {
                 return super.a(s);
             }
 
+            // The visitor reads the rename text through StateSnapshot#getText, so it has to be current
+            String previousText = this.x;
+            this.x = s;
             ItemStack item = renameVisitor.apply(s);
             if (item == null) {
+                this.x = previousText; // the vanilla method ignores a name equal to the current one
                 return super.a(s);
             }
 
-            this.x = s;
             this.b(2).f(CraftItemStack.asNMSCopy(item));
             l();
             return true;

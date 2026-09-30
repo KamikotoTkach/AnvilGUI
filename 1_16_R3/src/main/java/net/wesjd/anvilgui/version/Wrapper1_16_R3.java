@@ -135,6 +135,11 @@ public class Wrapper1_16_R3 implements VersionWrapper {
         }
 
         @Override
+        public boolean isExtendedApiSupported() {
+            return true;
+        }
+
+        @Override
         public void setLeftItem(ItemStack item) {
             this.getSlot(0).set(CraftItemStack.asNMSCopy(item));
         }
@@ -208,14 +213,18 @@ public class Wrapper1_16_R3 implements VersionWrapper {
                 return;
             }
 
+            // The visitor reads the rename text through StateSnapshot#getText, so it has to be current
+            String previousText = this.renameText;
+            this.renameText = s;
             ItemStack item = renameVisitor.apply(s);
             if (item == null) {
+                this.renameText = previousText;
                 super.a(s);
                 return;
             }
 
-            this.renameText = s;
             this.getSlot(2).set(CraftItemStack.asNMSCopy(item));
+            e(); // e -> createResult, recalculates the cost and syncs the slot to the client
         }
     }
 }
