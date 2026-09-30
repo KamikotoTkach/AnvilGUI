@@ -195,6 +195,7 @@ public final class Wrapper1_21_R3 implements VersionWrapper {
 
             this.x = s;
             this.b(2).f(CraftItemStack.asNMSCopy(item));
+            l();
             return true;
         }
     }
